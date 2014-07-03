@@ -103,15 +103,20 @@ def sync_members():
     return log
 
 
-@app.route('/sync')
+@app.route('/sync/members', methods=['POST'])
 @require_hook_secret
-def index():
+def sync_members_api():
     return jsonify(operations=sync_members())
 
 
-@app.cli.command('sync-members')
+@app.cli.group('sync')
+def sync_cmd():
+    """Synchronizes things for metaflask."""
+
+
+@sync_cmd.command('members')
 def sync_members_cmd():
-    """Synchronizes all members manually."""
+    """Synchronizes all members."""
     click.echo('Synchronizing members')
     for op, member in sync_members():
         click.echo('  %s %s' % (
